@@ -1,0 +1,45 @@
+{
+  "name": "@noderun/writefile",
+  "version": "0.0.1",
+  "description": "",
+  "main": "dist/writefile.umd.js",
+  "module": "dist/writefile.esm.js",
+  "typings": "dist/index.d.ts",
+  "bin": {
+    "writefile": "./dist/writefile.cjs.js"
+  },
+  "buildOptions": {
+    "filename": "writefile",
+    "var": "writefile",
+    "formats": [
+      "cjs"
+    ]
+  },
+  "scripts": {
+    "build": "node scripts/build.js",
+    "dev": "node scripts/dev.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@rollup/plugin-alias": "^3.1.1",
+    "@rollup/plugin-commonjs": "^15.0.0",
+    "@rollup/plugin-replace": "^2.3.3",
+    "chalk": "^4.1.0",
+    "dts-bundle": "^0.7.3",
+    "execa": "^4.0.3",
+    "fs-extra": "^9.0.1",
+    "ftp-deploy": "^2.3.6",
+    "lodash": "^4.17.20",
+    "rollup": "^2.26.3",
+    "rollup-plugin-scss": "^2.6.0",
+    "rollup-plugin-sourcemaps": "^0.6.2",
+    "rollup-plugin-typescript2": "^0.27.2",
+    "tslib": "^2.0.1",
+    "typescript": "^3.9.7"
+  },
+  "dependencies": {
+    "ejs": "^3.1.5"
+  }
+}

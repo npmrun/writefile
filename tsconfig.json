@@ -1,0 +1,41 @@
+{
+  "compilerOptions": {
+    // 不报告执行不到的代码错误。
+    "allowUnreachableCode": true,
+    "strictNullChecks": true,
+    // 严格模式, 强烈建议开启
+    "strict": true,
+    "allowJs": true,
+    // 支持别名导入:
+    // import * as React from "react"
+    "esModuleInterop": true,
+    // 目标js的版本
+    "target": "ES5",
+    // 目标代码的模块结构版本
+    "module": "ESNext",
+    // 在表达式和声明上有隐含的 any类型时报错。
+    "noImplicitAny": true,
+    // "__extends"等函数
+    // 将以"import {__extends} from 'tslib'的形式导入
+    "importHelpers": true,
+    // 删除注释
+    "removeComments": true,
+    // 保留 const和 enum声明
+    "preserveConstEnums": false,
+    // 编译过程中需要引入的库文件的列表
+    "lib": ["dom", "esnext"],
+    "sourceMap": true,
+    // 额外支持解构/forof等功能
+    "downlevelIteration": true,
+    // 此处设置为node,才能解析import xx from 'xx'
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "rootDir": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  },
+  // 限定包含src目录，其他目录的js文件不管辖
+  "include": ["src/*", "global.d.ts"],
+  "exclude": ["node_modules/**"]
+}
