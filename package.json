@@ -1,6 +1,6 @@
 {
   "name": "@noderun/writefile",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "main": "dist/writefile.umd.js",
   "module": "dist/writefile.esm.js",
@@ -22,6 +22,10 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/npmrun/writefile.git"
+  },
   "devDependencies": {
     "@rollup/plugin-alias": "^3.1.1",
     "@rollup/plugin-commonjs": "^15.0.0",
