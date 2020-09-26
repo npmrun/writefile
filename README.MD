@@ -15,16 +15,18 @@
 配置文件`writeFile.config.js`示例：
 
 `from__`开头对应`to__`，可采用多个文件模板
+`fromDir__`开头对应`toDir__`，可采用文件夹模板，直接复制整个文件夹
 ```
 module.exports = {
   filelist:[
     //字段都可用于模板变量
     {
-      use: false, // 不执行，ture时执行
-      viewName:'添加专区活动商品',
-      apiName:'configShare',
-      view: "addZoneGoods",
-      apiPath: "sms/addZoneGoods.js",
+      use: true,  // 是否启用这个生成模板
+      useDir: true, // 是否启用文件夹生成模板,可使用fromDir__
+      useFile: true, // 是否启用文件生成模板,可使用from__
+      force: false,  // 是否启用强制覆盖本地文件
+      fromDir__Dir: "./temp", // 文件夹模板
+      toDir__Dir: "./output",  // 文件夹模板生成路径
       from__View: "./createTemplate/add.vue",
       from__Api: "./createTemplate/api.js",
       to__View: "./admin/src/views/sms/addZoneGoods/index.vue",
