@@ -28,12 +28,15 @@ try {
   }
   if (isExistConfig && config.filelist && Array.isArray(config.filelist)) {
     config.filelist.forEach((file: IFileList) => {
+      // 不使用该模块
       if (!file.use) {
         return;
       }
+      // 使用文件夹模板
       if (file.useDir) {
         createDir(file);
       }
+      // 使用文件模板
       if (file.useFile) {
         createForEach(file);
       }
