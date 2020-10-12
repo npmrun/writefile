@@ -12,7 +12,7 @@
 
 执行`writefile`。
 
-配置文件`writeFile.config.js`示例：
+配置文件`writefile.config.js`示例：
 
 `from__`开头对应`to__`，可采用多个文件模板  
 `fromDir__`开头对应`toDir__`，可采用文件夹模板，直接复制整个文件夹
