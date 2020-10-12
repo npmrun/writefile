@@ -53,6 +53,18 @@ var util = {
     },
 };
 
+var config = {
+    configFileName: "writefile.config.js",
+    configFileListName: "filelist",
+    dirFromKey: "fromDir__",
+    dirToKey: "toDir__",
+    dirErrNoForce: "目标路径已存在，强制覆盖请使用字段force",
+    dirErrNoExist: "不存在源路径",
+    fileFromKey: "from__",
+    fileToKey: "to__",
+    fileErrNoForce: "路径已存在，为了安全，不覆盖已存在的文件",
+};
+
 var ejs = require("ejs");
 var path = require("path");
 var fs$1 = require("fs");
@@ -69,8 +81,8 @@ var func = {
         if (!params.useDir) {
             return;
         }
-        var myFromKey = "fromDir__";
-        var myToKey = "toDir__";
+        var myFromKey = config.dirFromKey;
+        var myToKey = config.dirToKey;
         var getFrom = Object.keys(params)
             .filter(function (key) {
             return key.startsWith(myFromKey);
@@ -98,7 +110,7 @@ var func = {
             if (isExists) {
                 util.isExists(targetView, function (isExistsTarget) {
                     if (isExistsTarget && !force) {
-                        throw "目标路径已存在，强制覆盖请使用字段force";
+                        throw config.dirErrNoForce;
                     }
                     else {
                         var isExistTargetViewDir = fs$1.existsSync(targetView);
@@ -116,7 +128,7 @@ var func = {
                 });
             }
             else {
-                throw "不存在源路径";
+                throw config.dirErrNoExist;
             }
         });
     },
@@ -125,8 +137,8 @@ var func = {
         if (!params.useFile) {
             return;
         }
-        var myFromKey = "from__";
-        var myToKey = "to__";
+        var myFromKey = config.fileFromKey;
+        var myToKey = config.fileToKey;
         var getFrom = Object.keys(params)
             .filter(function (key) {
             return key.startsWith(myFromKey);
@@ -162,31 +174,30 @@ var func = {
             fs$1.writeFileSync(targetView, html);
         }
         else {
-            throw "路径已存在，为了安全，不覆盖已存在的文件";
+            throw config.fileErrNoForce;
         }
     },
 };
 
-var ejs$1 = require("ejs");
 var path$1 = require("path");
 var fs$2 = require("fs");
 var currentPath$1 = process.cwd();
 func.path = currentPath$1;
-var configPath = path$1.resolve(currentPath$1, "writeFile.config.js");
+var configPath = path$1.resolve(currentPath$1, config.configFileName);
 var isExistConfig = fs$2.existsSync(configPath);
 if (!isExistConfig) {
     throw new Error("根目录不存在配置文件");
 }
 try {
-    var config = require(configPath);
-    if (isExistConfig && !config.filelist) {
-        throw new Error("配置文件不存在filelist字段");
+    var config_1 = require(configPath);
+    if (isExistConfig && !config_1[config_1.configFileListName]) {
+        throw new Error("\u914D\u7F6E\u6587\u4EF6\u4E0D\u5B58\u5728" + config_1.configFileListName + "\u5B57\u6BB5");
     }
-    if (isExistConfig && config.filelist && !Array.isArray(config.filelist)) {
-        throw new Error("filelist字段不是一个数组");
+    if (isExistConfig && config_1[config_1.configFileListName] && !Array.isArray(config_1[config_1.configFileListName])) {
+        throw new Error(config_1.configFileListName + "\u5B57\u6BB5\u4E0D\u662F\u4E00\u4E2A\u6570\u7EC4");
     }
-    if (isExistConfig && config.filelist && Array.isArray(config.filelist)) {
-        config.filelist.forEach(function (file) {
+    if (isExistConfig && config_1[config_1.configFileListName] && Array.isArray(config_1[config_1.configFileListName])) {
+        config_1[config_1.configFileListName].forEach(function (file) {
             if (!file.use) {
                 return;
             }
