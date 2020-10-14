@@ -1,6 +1,6 @@
 {
   "name": "@noderun/writefile",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "",
   "main": "dist/writefile.umd.js",
   "module": "dist/writefile.esm.js",
