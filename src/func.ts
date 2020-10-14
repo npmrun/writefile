@@ -3,7 +3,7 @@ const path = require("path");
 const fs = require("fs");
 import {IFileList} from "./Interface";
 import util from "./util";
-import config from "./config";
+import ProConfig from "./config";
 
 let currentPath = "";
 
@@ -18,8 +18,8 @@ export default {
     if (!params.useDir) {
       return;
     }
-    const myFromKey = config.dirFromKey;
-    const myToKey = config.dirToKey;
+    const myFromKey = ProConfig.dirFromKey;
+    const myToKey = ProConfig.dirToKey;
     let getFrom = Object.keys(params)
       .filter((key) => {
         return key.startsWith(myFromKey);
@@ -56,7 +56,7 @@ export default {
       if (isExists) {
         util.isExists(targetView, (isExistsTarget) => {
           if (isExistsTarget && !force) {
-            throw config.dirErrNoForce;
+            throw ProConfig.dirErrNoForce;
           } else {
             const isExistTargetViewDir = fs.existsSync(targetView);
             if (!isExistTargetViewDir) {
@@ -76,7 +76,7 @@ export default {
           }
         });
       } else {
-        throw config.dirErrNoExist;
+        throw ProConfig.dirErrNoExist;
       }
     });
   },
@@ -84,8 +84,8 @@ export default {
     if (!params.useFile) {
       return;
     }
-    const myFromKey = config.fileFromKey;
-    const myToKey = config.fileToKey;
+    const myFromKey = ProConfig.fileFromKey;
+    const myToKey = ProConfig.fileToKey;
     let getFrom = Object.keys(params)
       .filter((key) => {
         return key.startsWith(myFromKey);
@@ -129,7 +129,7 @@ export default {
       const html = ejs.render(originRoot, params);
       fs.writeFileSync(targetView, html);
     } else {
-      throw config.fileErrNoForce;
+      throw ProConfig.fileErrNoForce;
     }
   },
 };

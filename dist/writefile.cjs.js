@@ -53,7 +53,7 @@ var util = {
     },
 };
 
-var config = {
+var ProConfig = {
     configFileName: "writefile.config.js",
     configFileListName: "filelist",
     dirFromKey: "fromDir__",
@@ -81,8 +81,8 @@ var func = {
         if (!params.useDir) {
             return;
         }
-        var myFromKey = config.dirFromKey;
-        var myToKey = config.dirToKey;
+        var myFromKey = ProConfig.dirFromKey;
+        var myToKey = ProConfig.dirToKey;
         var getFrom = Object.keys(params)
             .filter(function (key) {
             return key.startsWith(myFromKey);
@@ -110,7 +110,7 @@ var func = {
             if (isExists) {
                 util.isExists(targetView, function (isExistsTarget) {
                     if (isExistsTarget && !force) {
-                        throw config.dirErrNoForce;
+                        throw ProConfig.dirErrNoForce;
                     }
                     else {
                         var isExistTargetViewDir = fs$1.existsSync(targetView);
@@ -128,7 +128,7 @@ var func = {
                 });
             }
             else {
-                throw config.dirErrNoExist;
+                throw ProConfig.dirErrNoExist;
             }
         });
     },
@@ -137,8 +137,8 @@ var func = {
         if (!params.useFile) {
             return;
         }
-        var myFromKey = config.fileFromKey;
-        var myToKey = config.fileToKey;
+        var myFromKey = ProConfig.fileFromKey;
+        var myToKey = ProConfig.fileToKey;
         var getFrom = Object.keys(params)
             .filter(function (key) {
             return key.startsWith(myFromKey);
@@ -174,7 +174,7 @@ var func = {
             fs$1.writeFileSync(targetView, html);
         }
         else {
-            throw config.fileErrNoForce;
+            throw ProConfig.fileErrNoForce;
         }
     },
 };
@@ -183,21 +183,21 @@ var path$1 = require("path");
 var fs$2 = require("fs");
 var currentPath$1 = process.cwd();
 func.path = currentPath$1;
-var configPath = path$1.resolve(currentPath$1, config.configFileName);
+var configPath = path$1.resolve(currentPath$1, ProConfig.configFileName);
 var isExistConfig = fs$2.existsSync(configPath);
 if (!isExistConfig) {
     throw new Error("根目录不存在配置文件");
 }
 try {
-    var config_1 = require(configPath);
-    if (isExistConfig && !config_1[config_1.configFileListName]) {
-        throw new Error("\u914D\u7F6E\u6587\u4EF6\u4E0D\u5B58\u5728" + config_1.configFileListName + "\u5B57\u6BB5");
+    var config = require(configPath);
+    if (isExistConfig && !config[ProConfig.configFileListName]) {
+        throw new Error("\u914D\u7F6E\u6587\u4EF6\u4E0D\u5B58\u5728" + ProConfig.configFileListName + "\u5B57\u6BB5");
     }
-    if (isExistConfig && config_1[config_1.configFileListName] && !Array.isArray(config_1[config_1.configFileListName])) {
-        throw new Error(config_1.configFileListName + "\u5B57\u6BB5\u4E0D\u662F\u4E00\u4E2A\u6570\u7EC4");
+    if (isExistConfig && config[ProConfig.configFileListName] && !Array.isArray(config[ProConfig.configFileListName])) {
+        throw new Error(ProConfig.configFileListName + "\u5B57\u6BB5\u4E0D\u662F\u4E00\u4E2A\u6570\u7EC4");
     }
-    if (isExistConfig && config_1[config_1.configFileListName] && Array.isArray(config_1[config_1.configFileListName])) {
-        config_1[config_1.configFileListName].forEach(function (file) {
+    if (isExistConfig && config[ProConfig.configFileListName] && Array.isArray(config[ProConfig.configFileListName])) {
+        config[ProConfig.configFileListName].forEach(function (file) {
             if (!file.use) {
                 return;
             }
