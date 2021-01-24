@@ -1,6 +1,32 @@
 #!/usr/bin/env node
 'use strict';
 
+/*! *****************************************************************************
+Copyright (c) Microsoft Corporation.
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
+***************************************************************************** */
+
+var __assign = function() {
+    __assign = Object.assign || function __assign(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+
 var fs = require("fs");
 var stat = fs.stat;
 var util = {
@@ -181,36 +207,76 @@ var func = {
 
 var path$1 = require("path");
 var fs$2 = require("fs");
+var stat$1 = fs$2.stat;
+var argu = process.argv.slice(2);
+var fromDir = argu[0];
+var toDir = argu[1];
+var opts = {};
+argu.slice(2).forEach(function (v) {
+    var argu = v.split("=");
+    if (argu) {
+        opts[argu[0]] = argu[1];
+    }
+});
 var currentPath$1 = process.cwd();
 func.path = currentPath$1;
 var configPath = path$1.resolve(currentPath$1, ProConfig.configFileName);
 var isExistConfig = fs$2.existsSync(configPath);
-if (!isExistConfig) {
-    throw new Error("根目录不存在配置文件");
+if (fromDir || toDir) {
+    if (!fs$2.existsSync(path$1.resolve(currentPath$1, fromDir))) {
+        throw new Error("没有对应模板目录");
+    }
+    if (!toDir) {
+        throw new Error("没有目标文件");
+    }
+    fromDir = path$1.resolve(currentPath$1, fromDir);
+    toDir = path$1.resolve(currentPath$1, toDir);
+    stat$1(fromDir, function (err, st) {
+        if (err) {
+            throw err;
+        }
+        if (st.isFile()) {
+            var json = __assign({ use: true, useDir: false, useFile: true, from__View: fromDir, to__View: toDir }, opts);
+            func.createForEach(json);
+        }
+        else if (st.isDirectory()) {
+            var json = __assign({ use: true, useDir: true, useFile: false, fromDir__View: fromDir, toDir__View: toDir }, opts);
+            func.createDir(json);
+        }
+    });
 }
-try {
-    var config = require(configPath);
-    if (isExistConfig && !config[ProConfig.configFileListName]) {
-        throw new Error("\u914D\u7F6E\u6587\u4EF6\u4E0D\u5B58\u5728" + ProConfig.configFileListName + "\u5B57\u6BB5");
+else if (isExistConfig && (!fromDir && !toDir)) {
+    try {
+        var config = require(configPath);
+        if (isExistConfig && !config[ProConfig.configFileListName]) {
+            throw new Error("\u914D\u7F6E\u6587\u4EF6\u4E0D\u5B58\u5728" + ProConfig.configFileListName + "\u5B57\u6BB5");
+        }
+        if (isExistConfig &&
+            config[ProConfig.configFileListName] &&
+            !Array.isArray(config[ProConfig.configFileListName])) {
+            throw new Error(ProConfig.configFileListName + "\u5B57\u6BB5\u4E0D\u662F\u4E00\u4E2A\u6570\u7EC4");
+        }
+        if (isExistConfig &&
+            config[ProConfig.configFileListName] &&
+            Array.isArray(config[ProConfig.configFileListName])) {
+            config[ProConfig.configFileListName].forEach(function (file) {
+                if (!file.use) {
+                    return;
+                }
+                if (file.useDir) {
+                    func.createDir(file);
+                }
+                if (file.useFile) {
+                    func.createForEach(file);
+                }
+            });
+        }
     }
-    if (isExistConfig && config[ProConfig.configFileListName] && !Array.isArray(config[ProConfig.configFileListName])) {
-        throw new Error(ProConfig.configFileListName + "\u5B57\u6BB5\u4E0D\u662F\u4E00\u4E2A\u6570\u7EC4");
-    }
-    if (isExistConfig && config[ProConfig.configFileListName] && Array.isArray(config[ProConfig.configFileListName])) {
-        config[ProConfig.configFileListName].forEach(function (file) {
-            if (!file.use) {
-                return;
-            }
-            if (file.useDir) {
-                func.createDir(file);
-            }
-            if (file.useFile) {
-                func.createForEach(file);
-            }
-        });
+    catch (error) {
+        throw new Error(error);
     }
 }
-catch (error) {
-    throw new Error(error);
+else {
+    throw new Error("命令行模式少了目录，配置文件模式少了配置");
 }
 //# sourceMappingURL=writefile.cjs.js.map

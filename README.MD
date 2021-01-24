@@ -38,3 +38,12 @@ module.exports = {
   ]
 }
 ```
+
+## 增加命令行模式
+
+```
+writefile template targetDir name=名字
+```
+template： 为示例的模板文件，可以是文件或者文件夹
+targetDir： 为输入的目标文件夹或文件
+后面长度随意，为文件中使用的变量，需携带 = 分隔
